@@ -17,7 +17,7 @@ python3 -m venv venv
 
 echo "==> 3. Archivo .env"
 if [ ! -f .env ]; then
-  IP=$(curl -s http://checkip.amazonaws.com || echo "")
+  IP=${PUBLIC_IP:-$(curl -s http://checkip.amazonaws.com || echo "")}
   CLAVE=$(./venv/bin/python -c "import secrets; print(secrets.token_urlsafe(50))")
   cat > .env <<EOF
 DJANGO_SECRET_KEY=$CLAVE
@@ -74,4 +74,4 @@ sudo nginx -t && sudo systemctl restart nginx
 # El usuario de nginx debe poder entrar a la carpeta del proyecto para los estáticos
 chmod o+x "$HOME"
 
-echo "==> Listo. Abrir en el navegador: http://$(curl -s http://checkip.amazonaws.com)/"
+echo "==> Listo. Abrir en el navegador: http://${PUBLIC_IP:-$(curl -s http://checkip.amazonaws.com)}/"
