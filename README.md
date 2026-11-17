@@ -9,7 +9,7 @@ Aplicación web en **Django** que analiza los sismos de magnitud ≥ 5 registrad
 
 | Enlace | |
 |---|---|
-| 🌐 Sitio desplegado en AWS | **http://TU_IP_PUBLICA_EC2/** ← completar |
+| 🌐 Sitio desplegado en AWS | **http://54.152.239.188/** (EC2 t3.small, us-east-1, IP elástica fija). En AWS Academy Learner Lab la instancia solo está encendida mientras el laboratorio está iniciado (Start Lab). |
 | 🎥 Video 1 – Proceso de despliegue en AWS | ← completar enlace |
 | 🎥 Video 2 – Presentación del software y explicación del código | ← completar enlace |
 
@@ -83,9 +83,18 @@ Desde la consola: botón **Connect → EC2 Instance Connect**. También se puede
 ssh -i sismos-key.pem ubuntu@TU_IP_PUBLICA_EC2
 ```
 
-### 3. Descargar el proyecto y desplegar
+### 3. Opción automática (la que usamos): crear todo desde CloudShell
+En la consola de AWS abrir **CloudShell** (ícono `>_`) y ejecutar:
 ```
-git clone https://github.com/USUARIO/REPOSITORIO.git Sismos_en_el_ultimo_siglo
+curl -sL https://raw.githubusercontent.com/CoteBawarshi/Sismos_Certamen3/main/deploy/crear_ec2.sh | bash
+```
+El script `deploy/crear_ec2.sh` crea el security group (puertos 22 y 80), una IP elástica fija y la instancia EC2 Ubuntu 24.04 (t3.small). Al encender, la instancia clona el repositorio y ejecuta `deploy/setup_ec2.sh` sola (user-data). El log de instalación queda en `/var/log/sismos-setup.log`.
+
+> Nota AWS Academy: la terminal del Learner Lab puede tener credenciales vencidas (`AuthFailure`); CloudShell usa las credenciales de la consola y funciona.
+
+### 3b. Opción manual: descargar el proyecto y desplegar
+```
+git clone https://github.com/CoteBawarshi/Sismos_Certamen3.git Sismos_en_el_ultimo_siglo
 cd Sismos_en_el_ultimo_siglo
 bash deploy/setup_ec2.sh
 ```
