@@ -1,0 +1,39 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+    <h2 style="border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-top: 0; color: #2c3e50;">{{ titulo }}</h2>
+    
+    
+{% include 'dashboard/_descripcion.html' %}
+
+    <!-- Muestra de Tablas o Gráficos -->
+    {% if explicaciones %}
+        <div class="card-explicacion">
+            <h3>Descripción de los Campos:</h3>
+            <ul>
+                {% for col, desc in explicaciones %}
+                    <li><b><code>{{ col }}</code></b>: {{ desc }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if tabla_datos %}
+        <div style="overflow-x: auto; margin-bottom: 30px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <h4>Muestra de las primeras 15 filas del dataset:</h4>
+            {{ tabla_datos|safe }}
+        </div>
+    {% endif %}
+
+    {% for img in graficos %}
+        <div class="grafico-container">
+            <img src="data:image/png;base64,{{ img }}" alt="Gráfico de análisis" style="max-width: 100%; height: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 8px;">
+        </div>
+    {% endfor %}
+
+    {% if plot_html %}
+        <div class="grafico-container" style="background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 10px;">
+            {{ plot_html|safe }}
+        </div>
+    {% endif %}
+{% endblock %}

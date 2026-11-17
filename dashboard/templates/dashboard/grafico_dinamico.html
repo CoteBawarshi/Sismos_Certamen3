@@ -1,0 +1,39 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+    <h2 class="titulo-pagina">{{ titulo }}</h2>
+
+    {% include 'dashboard/_descripcion.html' %}
+
+    {% include 'dashboard/_filtros.html' %}
+
+    <div class="card-explicacion">
+        <h3>Variables del gráfico</h3>
+        <ul>
+            <li><b>Eje X – Año:</b> año en que ocurrieron los sismos.</li>
+            <li><b>Eje Y izquierdo – Cantidad de sismos:</b> número de sismos del año que cumplen los filtros (barras).</li>
+            <li><b>Color de la barra – Magnitud promedio</b> de los sismos de ese año.</li>
+            <li><b>Eje Y derecho – Magnitud máxima:</b> el sismo más fuerte de cada año (línea).</li>
+        </ul>
+        <p style="margin-bottom:0;"><b>Filtros vigentes:</b> {{ filtros_texto }}</p>
+    </div>
+
+    {% if plot_html %}
+        <div class="kpis">
+            <div class="kpi"><span>{{ total }}</span>sismos en total</div>
+            <div class="kpi"><span>{{ años }}</span>años con actividad</div>
+            <div class="kpi"><span>{{ mag_max|floatformat:1 }}</span>magnitud máxima</div>
+        </div>
+        <div class="grafico-container" style="background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 10px;">
+            {{ plot_html|safe }}
+        </div>
+    {% else %}
+        <div class="sin-datos">
+            <b>No hay datos para la selección actual.</b><br>
+            No se registraron sismos que cumplan estos filtros ({{ filtros_texto }}).
+            Pruebe ampliando el rango de años, bajando la magnitud mínima o eligiendo otra región.
+        </div>
+    {% endif %}
+
+    <p><a class="btn" href="{% url 'reporte_dinamico' %}?{{ request.GET.urlencode }}">Ver estos datos en el Reporte 4 →</a></p>
+{% endblock %}

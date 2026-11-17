@@ -1,0 +1,28 @@
+<!-- Formulario de filtros compartido por el Gráfico Dinámico y el Reporte 4 (método GET: los filtros quedan en la URL) -->
+<form method="get" class="filtros">
+    <div>
+        <label for="f-pais">Región / país</label>
+        <select id="f-pais" name="pais">
+            {% for p in paises %}
+                <option value="{{ p }}" {% if p == filtros.pais %}selected{% endif %}>{{ p }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <label for="f-desde">Año desde</label>
+        <input id="f-desde" type="number" name="desde" min="1926" max="2026" value="{{ filtros.desde }}">
+    </div>
+    <div>
+        <label for="f-hasta">Año hasta</label>
+        <input id="f-hasta" type="number" name="hasta" min="1926" max="2026" value="{{ filtros.hasta }}">
+    </div>
+    <div>
+        <label for="f-mag">Magnitud mínima: <b id="mag-valor">{{ filtros.mag_min }}</b></label>
+        <input id="f-mag" type="range" name="mag_min" min="5" max="9" step="0.1" value="{{ filtros.mag_min }}"
+               oninput="document.getElementById('mag-valor').textContent = Number(this.value).toFixed(1)">
+    </div>
+    <div class="filtros-botones">
+        <button type="submit" class="btn">Aplicar filtros</button>
+        <a href="{{ request.path }}" class="btn btn-gris">Limpiar</a>
+    </div>
+</form>

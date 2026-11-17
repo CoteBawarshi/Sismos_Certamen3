@@ -1,0 +1,43 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+    <h2 class="titulo-pagina">{{ titulo }}</h2>
+
+    <div class="card-explicacion">
+        <h3 style="margin-top:0;">Origen de los datos</h3>
+        <p>{{ descripcion }}</p>
+        <h3>Descripción de las variables</h3>
+        <ul>
+            {% for col, desc in explicaciones %}
+                <li><b><code>{{ col }}</code></b>: {{ desc }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% if filtros %}
+        {% include 'dashboard/_filtros.html' %}
+        <p><b>Filtros vigentes:</b> {{ filtros_texto }} ·
+           <a href="{% url 'grafico_dinamico' %}?{{ request.GET.urlencode }}">ver en el Gráfico Dinámico</a></p>
+    {% endif %}
+
+    {% if sin_datos %}
+        <div class="sin-datos"><b>No hay datos para la selección actual.</b> Pruebe con otros filtros.</div>
+    {% else %}
+        <div class="tabla-contenedor">
+            {{ tabla_datos|safe }}
+        </div>
+    {% endif %}
+
+    {% if interpretacion %}
+        <div class="card-explicacion">
+            <h3 style="margin-top:0;">Interpretación</h3>
+            <p style="margin-bottom:0;">{{ interpretacion }}</p>
+        </div>
+    {% endif %}
+
+    <!-- Botones de descarga: llevan los mismos filtros de la URL actual -->
+    <div class="descargas">
+        <a class="btn btn-pdf" href="{% url 'descargar_pdf' nombre %}?{{ request.GET.urlencode }}">Descarga en PDF</a>
+        <a class="btn btn-excel" href="{% url 'descargar_excel' nombre %}?{{ request.GET.urlencode }}">Descarga en Excel</a>
+    </div>
+{% endblock %}
